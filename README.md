@@ -12,3 +12,9 @@ Why no libraries?<br />
 
 ### Timezone support
 `whenis 604m PST` --> `2020-05 PST`
+
+## Notes
+To install locally as standalone CLI
+```
+python setup.py install
+```
