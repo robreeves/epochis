@@ -1,19 +1,21 @@
 # whenis
-Why no libraries?<br />
--No dependency hell or virtual env required.<br />
--This is for fun and I like to do things from scratch.<br />
 
-## Product Spec
+A CLI to convert offsets from epoch to dates
 
+# Usage
 `whenis 604m` --> `2020-05 UTC`<br />
 `whenis 18409d` --> `2020-05-26 UTC`<br />
 `whenis 1590537600s` --> `2020-05-26 00:00:00 UTC`<br />
 `whenis 1590537600ms` --> `2020-05-26 00:00:00.000 UTC`<br />
 
-### Timezone support
+## Timezone support (TODO)
 `whenis 604m PST` --> `2020-05 PST`
 
-## Notes
+# Why doesn't this use third-party libraries?
+There are plenty of libraries to choose from for functionality such as CLI args parsing so why didn't I use them?
+This project is just for fun so why not? I like to practice by writing functionality from scratch.
+
+# Dev Notes
 To install locally as standalone CLI
 ```
 python setup.py install

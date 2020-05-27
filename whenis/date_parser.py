@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-class DateLexer:
-    """Tokenizes the CLI date input
+class DateParser:
+    """Parses date argument input
 
     Rules:
     DATE: [0-9]

@@ -1,4 +1,7 @@
+"""Methods to convert date offsets from epoch to proper dates
+"""
 from datetime import *
+
 
 EPOCH = datetime(1970, 1, 1)
 MONTHS_IN_YEAR = 12

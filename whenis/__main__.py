@@ -1,16 +1,29 @@
 import sys
-from whenis.date_lexer import *
-from whenis.cli import *
+from whenis.date_parser import *
+from whenis.from_epoch import *
+
+
+def _bad_input():
+    print("Expected usage: whenis {date}{unit}\nExample: whenis 604m")
+    sys.exit(2)
 
 
 def main():
-    date_input = sys.argv[1]
-    date_lexer = DateLexer(date_input)
+    if len(sys.argv) != 2:
+        _bad_input()
 
-    # todo validate types and EOF
-    date_token = date_lexer.next()
-    units_token = date_lexer.next()
-    eof_token = date_lexer.next()
+    date_input = sys.argv[1]
+    date_parser = DateParser(date_input)
+
+    date_token = date_parser.next()
+    if date_token.type is not DateTokenType.DATE:
+        _bad_input()
+
+    units_token = date_parser.next()
+
+    eof_token = date_parser.next()
+    if eof_token.type is not DateTokenType.EOF:
+        _bad_input()
 
     if units_token.type is DateTokenType.MONTHS:
         print(month(date_token.value))
