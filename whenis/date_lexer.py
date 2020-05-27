@@ -42,10 +42,28 @@ class DateLexer:
                 return self._date()
             elif self._look_ahead is 'm':
                 self._consume()
-                return DateToken(DateTokenType.MONTHS)
+                # todo do a better job of this parsing
+                if self._look_ahead is DateTokenType.EOF:
+                    return DateToken(DateTokenType.MONTHS)
+                elif self._look_ahead is 's':
+                    return DateToken(DateTokenType.MILLIS)
+                else:
+                    raise ValueError("Unexpected unit input at '' (index {}) of '{}'".format(self._look_ahead,
+                                                                                             self._look_ahead_index,
+                                                                                             self._input))
+            elif self._look_ahead is 'd':
+                self._consume()
+                return DateToken(DateTokenType.DAYS)
+            elif self._look_ahead is 's':
+                self._consume()
+                return DateToken(DateTokenType.SECONDS)
+            elif self._look_ahead is 's':
+                self._consume()
+                return DateToken(DateTokenType.SECONDS)
             else:
-                raise ValueError("Unexpected date input at '' (index {}) of '{}'".format(self._look_ahead, self._look_ahead_index, self._input))
-
+                raise ValueError("Unexpected date input at '' (index {}) of '{}'".format(self._look_ahead,
+                                                                                         self._look_ahead_index,
+                                                                                         self._input))
         return DateToken(DateTokenType.EOF)
 
 
@@ -60,5 +78,5 @@ class DateTokenType(Enum):
 
 class DateToken:
     def __init__(self, type, value=None):
-        self.token_type = type
-        self.token_value = value
+        self.type = type
+        self.value = value
