@@ -46,6 +46,7 @@ class DateParser:
                 if self._look_ahead is DateTokenType.EOF:
                     return DateToken(DateTokenType.MONTHS)
                 elif self._look_ahead is 's':
+                    self._consume()
                     return DateToken(DateTokenType.MILLIS)
                 else:
                     raise ValueError("Unexpected unit input at '' (index {}) of '{}'".format(self._look_ahead,
