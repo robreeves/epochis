@@ -1,15 +1,32 @@
 # epochis
 
-A CLI to convert offsets from epoch to dates
+A CLI to convert offsets from epoch to human readable dates
 
 # Usage
-`epochis 604m` --> `2020-05 UTC`<br />
-`epochis 18409d` --> `2020-05-26 UTC`<br />
-`epochis 1590537600s` --> `2020-05-26 00:00:00 UTC`<br />
-`epochis 1590537600ms` --> `2020-05-26 00:00:00.000 UTC`<br />
+```bash
+# Months since epoch
+$ epochis 604m
+2020-05
 
-## Timezone support (TODO)
-`epochis 604m PST` --> `2020-05 PST`
+# days since epoch
+$ epochis 18409d
+2020-05-26
+
+# seconds since epoch
+$ epochis 1590537600s
+2020-05-26 00:00:00
+
+# milliseconds since epoch
+$ epochis 1590537600ms
+2020-05-26 00:00:00.000
+```
+
+## Timezone support
+Right now all dates are in UTC. In the future timezones will be supported like this.
+```
+$ epochis 604m PST
+2020-05 PST
+```
 
 # Why doesn't this use third-party libraries?
 There are plenty of libraries to choose from for functionality such as CLI args parsing so why didn't I use them?
