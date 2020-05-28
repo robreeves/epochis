@@ -1,10 +1,10 @@
 import sys
-from whenis.date_parser import *
-from whenis.from_epoch import *
+from epochis.date_parser import *
+from epochis.from_epoch import *
 
 
 def _bad_input():
-    print("Expected usage: whenis {date}{unit}\nExample: whenis 604m")
+    print("Expected usage: epochis {date}{unit}\nExample: epochis 604m")
     sys.exit(2)
 
 
@@ -26,7 +26,7 @@ def main():
         _bad_input()
 
     if units_token.type is DateTokenType.MONTHS:
-        print(month(date_token.value))
+        print(month(date_token.value).strftime("%Y-%m"))
     elif units_token.type is DateTokenType.DAYS:
         print(day(date_token.value))
     elif units_token.type is DateTokenType.SECONDS:

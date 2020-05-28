@@ -1,4 +1,4 @@
-"""Setup for whenis CLI
+"""Setup for epochis CLI
 
 References:
 https://packaging.python.org/tutorials/packaging-projects/
@@ -10,18 +10,18 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="whenis-robreeves",
+    name="epochis",
     version="0.0.1",
     author="Rob Reeves",
     author_email="",
     description="TODO",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/robreeves/whenis",
+    url="https://github.com/robreeves/epochis",
     packages=setuptools.find_packages(),
     entry_points={
         'console_scripts': [
-            'whenis = whenis.__main__:main'
+            'epochis = epochis.__main__:main'
         ]
     },
     classifiers=[
