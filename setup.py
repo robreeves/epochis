@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="epochis",
-    version="0.0.2",
+    version="0.0.3",
     author="Rob Reeves",
     author_email="",
     description="A CLI to convert offsets from epoch to human readable dates",
