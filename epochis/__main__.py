@@ -1,5 +1,5 @@
 import sys
-from epochis.date_parser import *
+from epochis.date_parser import DateParser
 from epochis.from_epoch import *
 
 
