@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class DateLexer:
-    def __init__(self, input):
-        self._input = input
+    def __init__(self, date_input):
+        self._input = date_input
         self._look_ahead_index = -1
         self._look_ahead = None
 
@@ -20,7 +20,6 @@ class DateLexer:
         if self._look_ahead is DateTokenType.EOF:
             return DateToken(DateTokenType.EOF)
 
-        token = None
         if self._look_ahead.isdigit():
             token = DateToken(DateTokenType.NUMBER, self._look_ahead)
         elif self._look_ahead.isalpha():
@@ -44,8 +43,8 @@ class DateParser:
     SECONDS: s
     MILLIS: ms
     """
-    def __init__(self, input):
-        self._lexer = DateLexer(input)
+    def __init__(self, date_input):
+        self._lexer = DateLexer(date_input)
         self._look_ahead = self._lexer.next()
 
     def epoch_date(self):
@@ -97,6 +96,6 @@ class DateTokenType(Enum):
 
 
 class DateToken:
-    def __init__(self, type, value=None):
-        self.type = type
+    def __init__(self, token_type, value=None):
+        self.type = token_type
         self.value = value
