@@ -14,27 +14,18 @@ def main():
 
     date_input = sys.argv[1]
     date_parser = DateParser(date_input)
+    epoch_offset = date_parser.epoch_date()
 
-    date_token = date_parser.next()
-    if date_token.type is not DateTokenType.DATE:
-        _bad_input()
-
-    units_token = date_parser.next()
-
-    eof_token = date_parser.next()
-    if eof_token.type is not DateTokenType.EOF:
-        _bad_input()
-
-    if units_token.type is DateTokenType.MONTHS:
-        print(month(date_token.value).strftime("%Y-%m"))
-    elif units_token.type is DateTokenType.DAYS:
-        print(day(date_token.value))
-    elif units_token.type is DateTokenType.SECONDS:
-        print(seconds(date_token.value))
-    elif units_token.type is DateTokenType.MILLIS:
-        print(millis(date_token.value))
+    if epoch_offset.unit == 'm':
+        print(month(epoch_offset.offset).strftime("%Y-%m"))
+    elif epoch_offset.unit == 'd':
+        print(day(epoch_offset.offset))
+    elif epoch_offset.unit == 's':
+        print(seconds(epoch_offset.offset))
+    elif epoch_offset.unit == 'ms':
+        print(millis(epoch_offset.offset))
     else:
-        raise Exception("I forgot to implement unit {}".format(units_token.type))
+        raise Exception("Unit '{}' is unknown".format(epoch_offset.unit))
 
 
 if __name__ == "__main__":

@@ -1,16 +1,7 @@
 from enum import Enum
 
 
-class DateParser:
-    """Parses date argument input
-
-    Rules:
-    DATE: [0-9]
-    MONTHS: m
-    DAYS: d
-    SECONDS: s
-    MILLIS: ms
-    """
+class DateLexer:
     def __init__(self, input):
         self._input = input
         self._look_ahead_index = -1
@@ -25,56 +16,84 @@ class DateParser:
         else:
             self._look_ahead = DateTokenType.EOF
 
-    def _date(self):
-        start_index = self._look_ahead_index
+    def next(self):
+        if self._look_ahead is DateTokenType.EOF:
+            return DateToken(DateTokenType.EOF)
 
-        while self._look_ahead.isdigit():
+        token = None
+        if self._look_ahead.isdigit():
+            token = DateToken(DateTokenType.NUMBER, self._look_ahead)
+        elif self._look_ahead.isalpha():
+            token = DateToken(DateTokenType.LETTER, self._look_ahead)
+        else:
+            raise Exception(
+                "Unexpected character while parsing date input. Index: {}, Value: '{}'".format(self._look_ahead_index,
+                                                                                               self._look_ahead))
+
+        self._consume()
+        return token
+
+
+class DateParser:
+    """Parses date argument input
+
+    Rules:
+    DATE: [0-9]+
+    MONTHS: m
+    DAYS: d
+    SECONDS: s
+    MILLIS: ms
+    """
+    def __init__(self, input):
+        self._lexer = DateLexer(input)
+        self._look_ahead = self._lexer.next()
+
+    def epoch_date(self):
+        offset = self._offset()
+        unit = self._unit()
+        self._match(DateTokenType.EOF)
+
+        return DateOffset(offset, unit)
+
+    def _match(self, expected_token_type):
+        if self._look_ahead.type is not expected_token_type:
+            raise Exception(
+                "Error parsing date input. Expected token type: {}, but found: {}".format(expected_token_type,
+                                                                                          self._look_ahead.type))
+
+    def _consume(self):
+        self._look_ahead = self._lexer.next()
+
+    def _consume_until(self, token):
+        self._match(token)
+        values = [self._look_ahead.value]
+        self._consume()
+
+        while self._look_ahead.type is token:
+            values.append(self._look_ahead.value)
             self._consume()
 
-        end_index = self._look_ahead_index
-        date = int(self._input[start_index:end_index])
-        return DateToken(DateTokenType.DATE, date)
+        return values
 
-    def next(self):
-        while len(self._input) > self._look_ahead_index:
+    def _offset(self):
+        digits = self._consume_until(DateTokenType.NUMBER)
+        return int(''.join(digits))
 
-            if self._look_ahead.isdigit():
-                return self._date()
-            elif self._look_ahead is 'm':
-                self._consume()
-                # todo do a better job of this parsing
-                if self._look_ahead is DateTokenType.EOF:
-                    return DateToken(DateTokenType.MONTHS)
-                elif self._look_ahead is 's':
-                    self._consume()
-                    return DateToken(DateTokenType.MILLIS)
-                else:
-                    raise ValueError("Unexpected unit input at '' (index {}) of '{}'".format(self._look_ahead,
-                                                                                             self._look_ahead_index,
-                                                                                             self._input))
-            elif self._look_ahead is 'd':
-                self._consume()
-                return DateToken(DateTokenType.DAYS)
-            elif self._look_ahead is 's':
-                self._consume()
-                return DateToken(DateTokenType.SECONDS)
-            elif self._look_ahead is 's':
-                self._consume()
-                return DateToken(DateTokenType.SECONDS)
-            else:
-                raise ValueError("Unexpected date input at '' (index {}) of '{}'".format(self._look_ahead,
-                                                                                         self._look_ahead_index,
-                                                                                         self._input))
-        return DateToken(DateTokenType.EOF)
+    def _unit(self):
+        letters = self._consume_until(DateTokenType.LETTER)
+        return ''.join(letters)
+
+
+class DateOffset:
+    def __init__(self, offset, unit):
+        self.offset = offset
+        self.unit = unit
 
 
 class DateTokenType(Enum):
-    DATE = 1
-    MONTHS = 2
-    DAYS = 3
-    SECONDS = 4
-    MILLIS = 5
-    EOF = 6
+    NUMBER = 1
+    LETTER = 2
+    EOF = 3
 
 
 class DateToken:
