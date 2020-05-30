@@ -25,7 +25,10 @@ def _check_args(args):
         sys.exit(0)
 
 
-def main(args):
+def main(args=None):
+    if args is None:
+        args = sys.argv
+
     _check_args(args)
 
     try:
@@ -54,4 +57,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
