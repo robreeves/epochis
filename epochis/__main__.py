@@ -3,19 +3,37 @@ from epochis.date_parser import DateParser
 from epochis.from_epoch import *
 
 
-def _bad_input():
-    print("Expected usage: epochis {date}{unit}\nExample: epochis 604m")
-    sys.exit(2)
+def _print_usage():
+    print("Usage")
+    print("\tepochis {date}{unit}")
+    print("Example")
+    print("\tepochis 604m")
+    print("Supported Units")
+    print("\tm:  months since epoch")
+    print("\td:  days since epoch")
+    print("\ts:  seconds since epoch")
+    print("\tms: milliseconds since epoch")
 
 
-def main():
-    if len(sys.argv) != 2:
-        _bad_input()
+def _check_args(args):
+    if len(args) != 2:
+        print("Incorrect number of arguments\n")
+        _print_usage()
+        sys.exit(2)
+    elif args[1] == "--help" or args[1] == "-h":
+        _print_usage()
+        sys.exit(0)
 
-    date_input = sys.argv[1]
+
+def main(args):
+    _check_args(args)
+
+    # get date from input
+    date_input = args[1]
     date_parser = DateParser(date_input)
     epoch_offset = date_parser.epoch_date()
 
+    # convert from epoch offset to human readable date
     if epoch_offset.unit == 'm':
         print(month(epoch_offset.offset).strftime("%Y-%m"))
     elif epoch_offset.unit == 'd':
@@ -25,8 +43,10 @@ def main():
     elif epoch_offset.unit == 'ms':
         print(millis(epoch_offset.offset))
     else:
-        raise Exception("Unit '{}' is unknown".format(epoch_offset.unit))
+        print("Unit '{}' is not supported\n".format(epoch_offset.unit))
+        _print_usage()
+        sys.exit(2)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
