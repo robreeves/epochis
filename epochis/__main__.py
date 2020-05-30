@@ -17,7 +17,7 @@ def _print_usage():
 
 def _check_args(args):
     if len(args) != 2:
-        print("Incorrect number of arguments\n")
+        print("Incorrect number of arguments\n", file=sys.stderr)
         _print_usage()
         sys.exit(2)
     elif args[1] == "--help" or args[1] == "-h":
@@ -28,10 +28,15 @@ def _check_args(args):
 def main(args):
     _check_args(args)
 
-    # get date from input
-    date_input = args[1]
-    date_parser = DateParser(date_input)
-    epoch_offset = date_parser.epoch_date()
+    try:
+        # get date from input
+        date_input = args[1]
+        date_parser = DateParser(date_input)
+        epoch_offset = date_parser.epoch_date()
+    except ValueError as ve:
+        print(str(ve) + "\n", file=sys.stderr)
+        _print_usage()
+        sys.exit(2)
 
     # convert from epoch offset to human readable date
     if epoch_offset.unit == 'm':
@@ -43,7 +48,7 @@ def main(args):
     elif epoch_offset.unit == 'ms':
         print(millis(epoch_offset.offset))
     else:
-        print("Unit '{}' is not supported\n".format(epoch_offset.unit))
+        print("Unit '{}' is not supported\n".format(epoch_offset.unit), file=sys.stderr)
         _print_usage()
         sys.exit(2)
 

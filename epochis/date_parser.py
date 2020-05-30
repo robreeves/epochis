@@ -31,7 +31,7 @@ class DateLexer:
         elif self._look_ahead.isalpha():
             token = DateToken(DateTokenType.LETTER, self._look_ahead)
         else:
-            raise Exception(
+            raise ValueError(
                 "Unexpected character while parsing date input. Index: {}, Value: '{}'".format(self._look_ahead_index,
                                                                                                self._look_ahead))
 
@@ -63,7 +63,7 @@ class DateParser:
 
     def _match(self, expected_token_type):
         if self._look_ahead.type is not expected_token_type:
-            raise Exception(
+            raise ValueError(
                 "Error parsing date input. Expected token type: {}, but found: {}".format(expected_token_type,
                                                                                           self._look_ahead.type))
 
