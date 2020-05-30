@@ -54,3 +54,8 @@ To upload to pypi
 python setup.py sdist
 twine upload dist/*
 ```
+
+To run unit tests
+```
+python -m unittest
+```
