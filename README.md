@@ -4,7 +4,22 @@ A CLI to convert offsets from epoch to human readable dates
 
 # Usage
 ```bash
-# Months since epoch
+$ epochis --help
+Usage
+	epochis {date}{unit}
+Example
+	epochis 604m
+Supported Units
+	m:  months since epoch
+	d:  days since epoch
+	s:  seconds since epoch
+	ms: milliseconds since epoch
+```
+
+## Examples
+
+```bash
+# months since epoch
 $ epochis 604m
 2020-05
 
@@ -21,12 +36,8 @@ $ epochis 1590537600ms
 2020-05-26 00:00:00.000
 ```
 
-## Timezone support
-Right now all dates are in UTC. In the future timezones will be supported like this.
-```
-$ epochis 604m PST
-2020-05 PST
-```
+# Timezone support
+All dates are in UTC. Timezone support may be added in the future.
 
 # Why doesn't this use third-party libraries?
 There are plenty of libraries to choose from for functionality such as CLI args parsing so why didn't I use them?
