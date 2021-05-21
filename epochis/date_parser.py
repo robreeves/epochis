@@ -6,7 +6,7 @@ class DateLexer:
     Converts the date input into tokens
     """
     def __init__(self, date_input):
-        self._input = date_input
+        self._input = date_input.strip()
         self._look_ahead_index = -1
         self._look_ahead = None
 
