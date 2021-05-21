@@ -33,6 +33,10 @@ class TestMain(unittest.TestCase):
         out = _capture_stdout(lambda: main(["foo", "1590792100123ms"]))
         self.assertEqual("2020-05-29 22:41:40.123000", out)
 
+    def test_trims_input(self):
+        out = _capture_stdout(lambda: main(["foo", "  1590792100123ms  "]))
+        self.assertEqual("2020-05-29 22:41:40.123000", out)
+
 
 if __name__ == '__main__':
     unittest.main()
