@@ -1,4 +1,8 @@
+"""
+Contains classes related to parsing the date input args
+"""
 from enum import Enum
+from dataclasses import dataclass
 
 
 class DateLexer:
@@ -21,7 +25,8 @@ class DateLexer:
 
     def next(self):
         """
-        :return: The next token in the input. If no more input is available an EOF token is returned.
+        :return: The next token in the input. If no more input is available an EOF token is
+        returned.
         """
         if self._look_ahead is DateTokenType.EOF:
             return DateToken(DateTokenType.EOF)
@@ -32,8 +37,9 @@ class DateLexer:
             token = DateToken(DateTokenType.LETTER, self._look_ahead)
         else:
             raise ValueError(
-                "Unexpected character while parsing date input. Index: {}, Value: '{}'".format(self._look_ahead_index,
-                                                                                               self._look_ahead))
+                f"Unexpected character while parsing date input. Index: {self._look_ahead_index}, \
+                Value: '{self._look_ahead}'"
+            )
 
         self._consume()
         return token
@@ -64,8 +70,9 @@ class DateParser:
     def _match(self, expected_token_type):
         if self._look_ahead.type is not expected_token_type:
             raise ValueError(
-                "Error parsing date input. Expected token type: {}, but found: {}".format(expected_token_type,
-                                                                                          self._look_ahead.type))
+                f"Error parsing date input. Expected token type: {expected_token_type}, \
+                but found: {self._look_ahead.type}"
+            )
 
     def _consume(self):
         self._look_ahead = self._lexer.next()
@@ -90,17 +97,16 @@ class DateParser:
         return ''.join(letters)
 
 
+@dataclass
 class EpochOffset:
     """
     The date represented as an epoch offset
+
+    :param offset: The number offset from epoch
+    :param unit: The offset unit (e.g. 'm' for months)
     """
-    def __init__(self, offset, unit):
-        """
-        :param offset: The number offset from epoch
-        :param unit: The offset unit (e.g. 'm' for months)
-        """
-        self.offset = offset
-        self.unit = unit
+    offset: int
+    unit: str
 
 
 class DateTokenType(Enum):
@@ -112,14 +118,13 @@ class DateTokenType(Enum):
     EOF = 3
 
 
+@dataclass
 class DateToken:
     """
     The date lexer token
+
+    :param type: The date lexer token type
+    :param value: The token value
     """
-    def __init__(self, token_type, value=None):
-        """
-        :param token_type: The date lexer token type
-        :param value: The token value
-        """
-        self.type = token_type
-        self.value = value
+    type: DateTokenType
+    value: str = None
