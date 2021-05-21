@@ -38,14 +38,21 @@ def _print_date(epoch_offset: EpochOffset):
     Args:
         epoch_offset (EpochOffset): The epoch representation of the date to print
     """
+
+    def safe_date_print(print_func):
+        try:
+            print_func()
+        except (ValueError, OverflowError):
+            print("Invalid date")
+
     if epoch_offset.unit == 'm':
-        print(month(epoch_offset.offset).strftime("%Y-%m"))
+        safe_date_print(lambda: print(month(epoch_offset.offset).strftime("%Y-%m")))
     elif epoch_offset.unit == 'd':
-        print(day(epoch_offset.offset))
+        safe_date_print(lambda: print(day(epoch_offset.offset)))
     elif epoch_offset.unit == 's':
-        print(seconds(epoch_offset.offset))
+        safe_date_print(lambda: print(seconds(epoch_offset.offset)))
     elif epoch_offset.unit == 'ms':
-        print(millis(epoch_offset.offset))
+        safe_date_print(lambda: print(millis(epoch_offset.offset)))
     else:
         print("Unit '{}' is not supported\n".format(epoch_offset.unit), file=sys.stderr)
         _print_usage()

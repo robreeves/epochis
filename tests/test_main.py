@@ -69,6 +69,24 @@ class TestMain(unittest.TestCase):
             out
         )
 
+    def test_no_units_invalid_date(self):
+        """Tests no date units and the input is invalid for some of the units
+        """
+        out = _capture_stdout(lambda: main(["foo", "1621638379"])).splitlines()
+        self.assertListEqual(
+            [
+                "m:",
+                "    Invalid date",
+                "d:",
+                "    Invalid date",
+                "s:",
+                "    2021-05-21 23:06:19",
+                "ms:",
+                "    1970-01-19 18:27:18.379000"
+            ],
+            out
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
