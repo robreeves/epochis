@@ -52,10 +52,22 @@ class TestMain(unittest.TestCase):
         self.assertEqual("2020-05-29 22:41:40.123000", out)
 
     def test_no_units(self):
-        """Tests no units
+        """Tests no date units
         """
-        out = _capture_stdout(lambda: main(["foo", "604"]))
-        self.assertEqual("2020-05\n1971-08-28\n1970-01-01 00:10:04\n1970-01-01 00:00:00.604000", out)
+        out = _capture_stdout(lambda: main(["foo", "604"])).splitlines()
+        self.assertListEqual(
+            [
+                "m:",
+                "    2020-05",
+                "d:",
+                "    1971-08-28",
+                "s:",
+                "    1970-01-01 00:10:04",
+                "ms:",
+                "    1970-01-01 00:00:00.604000"
+            ],
+            out
+        )
 
 
 if __name__ == '__main__':

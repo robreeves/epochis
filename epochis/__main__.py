@@ -74,7 +74,7 @@ def main(args=None):
     if epoch_offset.unit == '':
         # If there are no units, try all of them and let the user pick the best option
         for unit in UNIT_GUESSES:
-            print(f"{unit}:", end="\n\t")
+            print(f"{unit}:", end="\n    ")
             _print_date(EpochOffset(epoch_offset.offset, unit))
     else:
         _print_date(epoch_offset)
