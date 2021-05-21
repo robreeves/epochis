@@ -1,6 +1,10 @@
+"""
+Entry point for epochis CLI
+"""
 import sys
+
 from epochis.date_parser import DateParser
-from epochis.from_epoch import *
+from epochis.from_epoch import day, millis, month, seconds
 
 
 def _print_usage():
@@ -26,6 +30,9 @@ def _check_args(args):
 
 
 def main(args=None):
+    """
+    Entry point for CLI
+    """
     if args is None:
         args = sys.argv
 
@@ -36,8 +43,8 @@ def main(args=None):
         date_input = args[1]
         date_parser = DateParser(date_input)
         epoch_offset = date_parser.epoch_date()
-    except ValueError as ve:
-        print(str(ve) + "\n", file=sys.stderr)
+    except ValueError as value_error:
+        print(str(value_error) + "\n", file=sys.stderr)
         _print_usage()
         sys.exit(2)
 
