@@ -93,6 +93,10 @@ class DateParser:
         return int(''.join(digits))
 
     def _unit(self):
+        if self._look_ahead.type is DateTokenType.EOF:
+            # This supports the case where the user does not provide units
+            return ''
+
         letters = self._consume_until(DateTokenType.LETTER)
         return ''.join(letters)
 

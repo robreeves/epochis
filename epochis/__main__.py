@@ -3,8 +3,11 @@ Entry point for epochis CLI
 """
 import sys
 
-from epochis.date_parser import DateParser
+from epochis.date_parser import DateParser, EpochOffset
 from epochis.from_epoch import day, millis, month, seconds
+
+
+UNIT_GUESSES = ['m', 'd', 's', 'ms']
 
 
 def _print_usage():
@@ -29,6 +32,33 @@ def _check_args(args):
         sys.exit(0)
 
 
+def _print_date(epoch_offset: EpochOffset):
+    """Prints the date for the given epoch offset
+
+    Args:
+        epoch_offset (EpochOffset): The epoch representation of the date to print
+    """
+
+    def safe_date_print(print_func):
+        try:
+            print_func()
+        except (ValueError, OverflowError):
+            print("Invalid date")
+
+    if epoch_offset.unit == 'm':
+        safe_date_print(lambda: print(month(epoch_offset.offset).strftime("%Y-%m")))
+    elif epoch_offset.unit == 'd':
+        safe_date_print(lambda: print(day(epoch_offset.offset)))
+    elif epoch_offset.unit == 's':
+        safe_date_print(lambda: print(seconds(epoch_offset.offset)))
+    elif epoch_offset.unit == 'ms':
+        safe_date_print(lambda: print(millis(epoch_offset.offset)))
+    else:
+        print("Unit '{}' is not supported\n".format(epoch_offset.unit), file=sys.stderr)
+        _print_usage()
+        sys.exit(2)
+
+
 def main(args=None):
     """
     Entry point for CLI
@@ -48,19 +78,13 @@ def main(args=None):
         _print_usage()
         sys.exit(2)
 
-    # convert from epoch offset to human readable date
-    if epoch_offset.unit == 'm':
-        print(month(epoch_offset.offset).strftime("%Y-%m"))
-    elif epoch_offset.unit == 'd':
-        print(day(epoch_offset.offset))
-    elif epoch_offset.unit == 's':
-        print(seconds(epoch_offset.offset))
-    elif epoch_offset.unit == 'ms':
-        print(millis(epoch_offset.offset))
+    if epoch_offset.unit == '':
+        # If there are no units, try all of them and let the user pick the best option
+        for unit in UNIT_GUESSES:
+            print(f"{unit}:", end="\n    ")
+            _print_date(EpochOffset(epoch_offset.offset, unit))
     else:
-        print("Unit '{}' is not supported\n".format(epoch_offset.unit), file=sys.stderr)
-        _print_usage()
-        sys.exit(2)
+        _print_date(epoch_offset)
 
 
 if __name__ == "__main__":
