@@ -34,6 +34,17 @@ $ epochis 1590537600s
 # milliseconds since epoch
 $ epochis 1590537600ms
 2020-05-26 00:00:00.000
+
+# units unknown/unspecified
+$ epochis 1590537600                                                                                                  roreeves@roreeves-mn6831
+m:
+    Invalid date
+d:
+    Invalid date
+s:
+    2020-05-27 00:00:00
+ms:
+    1970-01-19 09:48:57.600000
 ```
 
 # Timezone support
